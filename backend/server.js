@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import morgan from "morgan";
+import AdminRouter from "./admin/AdminRouter.js";
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
 mongoose.set("useFindAndModify", false);
@@ -15,6 +16,7 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.status(200).json("Thanusa I love u");
 });
+app.use("/admin", AdminRouter);
 
 const PORT = 5000 || process.env.PORT;
 

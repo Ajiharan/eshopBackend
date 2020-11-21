@@ -4,19 +4,20 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import morgan from "morgan";
 import AdminRouter from "./admin/AdminRouter.js";
+import CategoryRouter from "./category/CategoryRouter.js";
+import cookieParser from "cookie-parser";
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
 mongoose.set("useFindAndModify", false);
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 dotenv.config();
 app.use(morgan("dev"));
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.status(200).json("Thanusa I love u");
-});
 app.use("/admin", AdminRouter);
+app.use("/admin/category", CategoryRouter);
 
 const PORT = 5000 || process.env.PORT;
 

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 const AdminSchema = mongoose.Schema({
   name: {
     type: String,
@@ -13,6 +12,10 @@ const AdminSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  token: {
+    type: String,
+    default: null,
+  },
 });
 
-export default mongoose.model("AdminSchema", AdminSchema);
+export default mongoose.model("adminschemas", AdminSchema);

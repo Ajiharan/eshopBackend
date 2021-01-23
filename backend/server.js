@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import AdminRouter from "./admin/AdminRouter.js";
 import CategoryRouter from "./category/CategoryRouter.js";
+import ProductRouter from "./product/ProductRouter.js";
 import cookieParser from "cookie-parser";
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
@@ -18,6 +19,7 @@ app.use(cors());
 
 app.use("/admin", AdminRouter);
 app.use("/admin/category", CategoryRouter);
+app.use("/admin/product", ProductRouter);
 
 const PORT = 5000 || process.env.PORT;
 

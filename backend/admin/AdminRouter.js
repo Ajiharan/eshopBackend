@@ -52,7 +52,7 @@ router.post("/login", async (req, res) => {
             emailId: validData.emailId,
           },
           process.env.SECREAT_KEY,
-          { expiresIn: 60 * 10 }
+          { expiresIn: 60 * 40 }
         );
         const update = await AdminSchema.update(
           { _id: validData._id },

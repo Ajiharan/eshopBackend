@@ -119,12 +119,20 @@ router.post(
     }
   },
   async (req, res) => {
-    const categoryData = await new CategorySchema({
-      name: req.body.name,
-      description: req.body.description,
-    });
-    const saveData = await categoryData.save();
-    res.status(200).json(saveData);
+    const isExists = await CategorySchema.find(
+      { name: req.body.name.toLowerCase() },
+      { _id: 0, description: 0 }
+    );
+    if (isExists.length > 0) {
+      res.status(400).json("Sorry Name already exists");
+    } else {
+      const categoryData = await new CategorySchema({
+        name: req.body.name.toLowerCase(),
+        description: req.body.description,
+      });
+      const saveData = await categoryData.save();
+      res.status(200).json(saveData);
+    }
   }
 );
 

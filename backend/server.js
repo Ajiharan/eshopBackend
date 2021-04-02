@@ -33,3 +33,7 @@ mongoose.connect(process.env.DB_CONNECTION, (err) => {
 app.listen(PORT, () => {
   console.log(`Port listen in ${PORT}`);
 });
+
+// DB_CONNECTION=mongodb+srv://react:react@cluster0-oyulr.gcp.mongodb.net/eshop?retryWrites=true&w=majority
+
+// SECREAT_KEY=Angular

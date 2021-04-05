@@ -22,7 +22,7 @@ db.once("open", () => {
   const changeStream = msgCollection.watch();
 
   changeStream.on("change", (change) => {
-    console.log("A change Occured", change);
+    //console.log("A change Occured", change);
 
     if (change.operationType === "update") {
       const updateDetails = change.updateDescription;
@@ -54,7 +54,7 @@ router.post("/login", async (req, res) => {
           process.env.SECREAT_KEY,
           { expiresIn: 60 * 40 }
         );
-        const update = await AdminSchema.update(
+        const update = await AdminSchema.updateOne(
           { _id: validData._id },
           {
             $set: {

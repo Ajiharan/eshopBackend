@@ -4,8 +4,11 @@ import jwt from "jsonwebtoken";
 import { TokenValidator, setToken } from "../Extras.js";
 import Pusher from "pusher";
 import mongoose from "mongoose";
-const router = express.Router();
+import client from "../RedisConfig.js";
+import { v4 as uuidv4 } from "uuid";
 
+const router = express.Router();
+let keyValue = uuidv4();
 const pusher = new Pusher({
   appId: "1107394",
   key: "b58f0426c6ed81540688",
@@ -13,14 +16,16 @@ const pusher = new Pusher({
   cluster: "ap2",
   useTLS: true,
 });
-
+client.on("error", function (error) {
+  console.error(error);
+});
 const db = mongoose.connection;
 db.once("open", () => {
   const msgCollection = db.collection("categoryschemas");
   const changeStream = msgCollection.watch();
 
   changeStream.on("change", (change) => {
-    console.log("A change Occured", change);
+    // console.log("A change Occured", change);
 
     if (change.operationType === "insert") {
       const updateDetails = change.fullDocument;
@@ -56,17 +61,28 @@ router.get(
     }
   },
   async (req, res) => {
-    CategorySchema.find()
-      .then((result) => {
-        if (result.length > 0) {
-          res.status(200).json(result);
+    client.get(keyValue, (err, response) => {
+      if (response) {
+        if (JSON.parse(response).length > 0) {
+          res.status(200).json(JSON.parse(response));
         } else {
           res.status(204).json("No data");
         }
-      })
-      .catch((err) => {
-        res.status(400).json(err.message);
-      });
+      } else {
+        CategorySchema.find()
+          .then((result) => {
+            if (result.length > 0) {
+              client.set(keyValue, JSON.stringify(result));
+              res.status(200).json(result);
+            } else {
+              res.status(204).json("No data");
+            }
+          })
+          .catch((err) => {
+            res.status(400).json(err.message);
+          });
+      }
+    });
   }
 );
 
@@ -91,6 +107,9 @@ router.delete(
   async (req, res) => {
     CategorySchema.deleteOne({ _id: req.params.id })
       .then((result) => {
+        client.del(keyValue, (err, response) => {
+          keyValue = uuidv4();
+        });
         res.status(200).json(result);
       })
       .catch((err) => {
@@ -126,6 +145,9 @@ router.post(
     if (isExists.length > 0) {
       res.status(400).json("Sorry Name already exists");
     } else {
+      client.del(keyValue, (err, response) => {
+        keyValue = uuidv4();
+      });
       const categoryData = await new CategorySchema({
         name: req.body.name.toLowerCase(),
         description: req.body.description,

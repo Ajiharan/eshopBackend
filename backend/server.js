@@ -7,6 +7,7 @@ import AdminRouter from "./admin/AdminRouter.js";
 import CategoryRouter from "./category/CategoryRouter.js";
 import ProductRouter from "./product/ProductRouter.js";
 import cookieParser from "cookie-parser";
+
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
 mongoose.set("useFindAndModify", false);

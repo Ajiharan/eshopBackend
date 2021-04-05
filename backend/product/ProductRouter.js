@@ -19,7 +19,7 @@ db.once("open", () => {
   const changeStream = msgCollection.watch();
 
   changeStream.on("change", (change) => {
-    console.log("A change Occured", change);
+    // console.log("A change Occured", change);
 
     if (change.operationType === "insert") {
       const updateDetails = change.fullDocument;

@@ -10,7 +10,7 @@ export const TokenValidator = (token) => {
 };
 
 const setToken = (jwt, jwtToken) => {
-  return AdminSchema.update(
+  return AdminSchema.updateOne(
     { _id: jwt.decode(jwtToken)._id },
     {
       $set: {
